@@ -17,8 +17,6 @@ import com.project.springboot.service.IUserService;
 @RequestMapping("/pathLab")
 public class HomeRestController {
 
-	
-	
 	@Autowired
 	IUserService userService;
 	
