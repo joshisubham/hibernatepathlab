@@ -6,10 +6,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-//Check this Line
-
-
-
+//Check this Line123
 @SpringBootApplication
 //@EntityScan("com.project.springboot.bean")
 public class PathLabApplication {
