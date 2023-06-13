@@ -27,6 +27,8 @@ public class HomeRestController {
 	private static String GET_ALL= "/roles";
 
 	
+	
+	
     @RequestMapping("/home")
     public String home(){
         return "loading";
