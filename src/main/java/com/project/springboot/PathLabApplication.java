@@ -8,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 //Check this Line
 
+
+
 @SpringBootApplication
 //@EntityScan("com.project.springboot.bean")
 public class PathLabApplication {
