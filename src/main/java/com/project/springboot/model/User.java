@@ -47,7 +47,107 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 			name = "getUsers", 
 			procedureName = "GET_USERS"
+	),
+	@NamedStoredProcedureQuery(
+		name = "checkIfUsernameExists",
+		procedureName = "checkIfUsernameExists",
+		parameters = {
+			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class),
+				
+		}
+			/*
+			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `checkIfUsernameExists`(IN db_email text)
+				BEGIN
+					select * from users where users.email = db_email;
+				END
+			 * 
+			 * 
+			 */
+	),
+	@NamedStoredProcedureQuery(
+			name = "validateLogin",
+			procedureName = "validateLogin",
+			parameters = {
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_password", type = String.class),
+					
+			}
+				/*
+				 *  CREATE DEFINER=`root`@`localhost` PROCEDURE `validateLogin`(IN db_email TEXT, IN db_password TEXT)
+					BEGIN
+						select * from users where users.email = db_email and users.`password` = db_password;
+					END
+				 * 
+				 * 
+				 */
+	),
+	@NamedStoredProcedureQuery(
+			name = "getUserById",
+			procedureName = "getUserById",
+			parameters = {
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class)
+					
+			}
+				/*
+				 * CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserById`(IN db_id TEXT)
+					BEGIN
+						select * from users where id = db_id;
+					END
+				 * 
+				 * 
+				 */
+		),
+	@NamedStoredProcedureQuery(
+			name = "updateUser",
+			procedureName = "updateUser",
+			parameters = {
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_address", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_age", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_archive", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_gender", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_name", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_password", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_phone", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_role_id", type = String.class)
+				}
+			
+				/*
+				 * CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUser`(IN db_id TEXT, IN db_address TEXT, IN db_age TEXT, IN db_archive TEXT, IN db_email TEXT, IN db_gender TEXT, IN db_user_name TEXT, IN db_user_password TEXT, IN db_phone TEXT, IN db_role_id TEXT, OUT result INT)
+				BEGIN
+					update users set users.`address`= db_address, users.`age`= db_age,users.`archive`= db_archive,
+				    users.`email`= db_email,
+				    users.`gender`= db_gender,users.`name`= db_user_name,users.`password`=db_user_password,
+				    users.`phone`= db_phone, users.`role_id`= db_role_id where 
+				    users.`id` = db_id;
+					-- VALUES(id,db_address,db_age,db_archive,db_email,db_gender,db_user_name ,db_user_password,db_phone,db_role_id);
+				
+				
+				select ifnull(id, 0) INTO result from users where id= (select last_insert_id()) and `email`= db_email;
+				
+				END
+								 * 
+				 * 
+				 */
+		),
+	@NamedStoredProcedureQuery(
+			name = "getUserPermission",
+			procedureName = "getUserPermission",
+			parameters = {
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_id", type = String.class)
+			}
+			/*
+			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPermission`(in db_user_id text)
+				BEGIN
+					select role_permission.* from role_permission
+						inner join users 
+						on role_permission.role_id = users.role_id
+						where users.id = db_user_id;
+				END
+			 */
 	)
+	
 	
 	
 	
