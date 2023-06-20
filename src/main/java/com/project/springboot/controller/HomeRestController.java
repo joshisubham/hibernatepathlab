@@ -5,11 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.springboot.model.Role;
 import com.project.springboot.model.User;
+import com.project.springboot.repository.ModuleRepository;
+import com.project.springboot.service.IModuleService;
 import com.project.springboot.service.IRoleService;
 import com.project.springboot.service.IUserService;
 
@@ -22,6 +25,9 @@ public class HomeRestController {
 	
 	@Autowired
 	IRoleService roleService;
+	
+	@Autowired
+	IModuleService moduleService;
 	
 	private static String GET_ALL_ROLES_URL= "/roles";
 	private static String GET_ALL= "/roles";
@@ -70,7 +76,38 @@ public class HomeRestController {
 //	   // Do any additional configuration here
 //	   return builder.build();
 //	}
-  
+	@GetMapping(path = "/checkIfUsernameExists", produces = { "application/json" })	
+	public List<User> checkIfUsernameExists(@RequestBody String email) {
+		//String email = "subhamjoshi466@gmail.com";
+		List<User> users = userService.checkIfUsernameExists(email);
+		users.forEach((x)->{System.out.println(x);});
+		return users;
+	}
+	@GetMapping(path = "/validateLogin", produces = { "application/json" })
+	public List<User> validateLogin(@RequestBody String email, String password) {
+		List<User> users = userService.validateLogin(email, password);
+		users.forEach((x)->{System.out.println(x);});
+		return users;
+		
+	}
+	@GetMapping(path = "/getUserById", produces = { "application/json" })
+	public List<User> getUserById(@RequestBody String userId) {
+		List<User> users = userService.getUserById(userId);
+		users.forEach((x)->{System.out.println(x);});
+		return users;
+		
+	}
+	@GetMapping(path = "/getUserPermission", produces = { "application/json" }, consumes = {"application/json"})	
+	public List<Object> getUserPermission(@RequestBody String userId) {
+		return userService.getUserPermission("1");
+	}
+	@GetMapping(path = "/updateUser", produces = { "application/json" })	
+	public int updateUser(@RequestBody User user, int roleId) {
+		return userService.updateUser(user, roleId);
+		
+	}
+	
+	
   
     
 }

@@ -1,5 +1,7 @@
 package com.project.springboot.model;
 
+import org.hibernate.annotations.Proxy;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +25,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 		name = "checkIfCartItemExists", 
 		procedureName = "checkIfCartItemExists", 
+		resultClasses = {Cart.class},
 		parameters = {
 			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
 			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_userId", type = String.class)
@@ -37,6 +40,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "insertCartItem", 
 			procedureName = "insertCartItem", 
+					resultClasses = {Cart.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_itemid", type = String.class),
@@ -52,6 +56,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "deleteCartItem", 
 			procedureName = "deleteCartItem", 
+					resultClasses = {Cart.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_userId", type = String.class),
@@ -68,6 +73,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "getAllCartItemsByUserId", 
 			procedureName = "getAllCartItemsByUserId", 
+					resultClasses = {Cart.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_userId", type = String.class)
 				
@@ -82,20 +88,9 @@ import lombok.NoArgsConstructor;
 })
 
 
-
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
-
-
-
-
-
-
 @Entity
 @Table(name="cart")
+@Proxy(lazy = false)
 public class Cart {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)  
@@ -105,5 +100,37 @@ public class Cart {
 	private User user;
 	
 	private String itemid;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getItemid() {
+		return itemid;
+	}
+
+	public void setItemid(String itemid) {
+		this.itemid = itemid;
+	}
+
+	@Override
+	public String toString() {
+		return "Cart [id=" + id + ", user=" + user + ", itemid=" + itemid + "]";
+	}
+	
+	
+	
 	
 }

@@ -2,11 +2,14 @@ package com.project.springboot.model;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.Proxy;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedStoredProcedureQueries;
 import jakarta.persistence.NamedStoredProcedureQuery;
 import jakarta.persistence.OneToMany;
@@ -29,7 +32,7 @@ import lombok.NoArgsConstructor;
 	)
 })
 
-
+@Proxy(lazy=false)
 @Entity
 @Table(name="role")
 public class Role implements Serializable{
@@ -40,6 +43,7 @@ public class Role implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)  
+//	@ManyToMany(mappedBy = "role_id")
 	private int id;
 	
 	

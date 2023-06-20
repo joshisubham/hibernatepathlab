@@ -1,5 +1,9 @@
 package com.project.springboot.model;
 
+import java.io.Serializable;
+
+import org.hibernate.annotations.Proxy;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +23,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 		name = "checkIfItemExists", 
 		procedureName = "checkIfItemExists", 
+		resultClasses = {Item.class},
 		parameters = {
 			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_name", type = String.class)
 		}
@@ -32,6 +37,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "archiveItem", 
 			procedureName = "archiveItem", 
+			resultClasses = {Item.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class)
 			}
@@ -45,6 +51,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "getItemById", 
 			procedureName = "getItemById", 
+			resultClasses = {Item.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class)
 			}
@@ -58,6 +65,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "insertItem", 
 			procedureName = "insertItem", 
+			resultClasses = {Item.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_afterfood", type = String.class),
@@ -80,6 +88,7 @@ import lombok.NoArgsConstructor;
 	@NamedStoredProcedureQuery(
 			name = "updateItem", 
 			procedureName = "updateItem", 
+			resultClasses = {Item.class},
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_afterfood", type = String.class),
@@ -102,14 +111,16 @@ import lombok.NoArgsConstructor;
 })
 
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
 
 @Entity
+@Proxy(lazy=false)
 @Table(name = "item")
-public class Item {
+public class Item implements Serializable {
+	
+	
+	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -131,5 +142,62 @@ public class Item {
 	private int offer;
 	@Column(columnDefinition = "TINYINT(1)")
 	private boolean archive;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public boolean isBeforefood() {
+		return beforefood;
+	}
+	public void setBeforefood(boolean beforefood) {
+		this.beforefood = beforefood;
+	}
+	public boolean isAfterfood() {
+		return afterfood;
+	}
+	public void setAfterfood(boolean afterfood) {
+		this.afterfood = afterfood;
+	}
+	public boolean isNormal() {
+		return normal;
+	}
+	public void setNormal(boolean normal) {
+		this.normal = normal;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public int getOffer() {
+		return offer;
+	}
+	public void setOffer(int offer) {
+		this.offer = offer;
+	}
+	public boolean isArchive() {
+		return archive;
+	}
+	public void setArchive(boolean archive) {
+		this.archive = archive;
+	}
+	@Override
+	public String toString() {
+		return "Item [id=" + id + ", name=" + name + ", beforefood=" + beforefood + ", afterfood=" + afterfood
+				+ ", normal=" + normal + ", price=" + price + ", offer=" + offer + ", archive=" + archive + "]";
+	}
+	
+	
+	
+	
 	
 }

@@ -1,6 +1,8 @@
 package com.project.springboot.model;
 import java.util.Date;
 
+import org.hibernate.annotations.Proxy;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,8 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedStoredProcedureQueries;
-import jakarta.persistence.NamedStoredProcedureQuery;
+import jakarta.persistence.NamedNativeQueries;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureParameter;
 import jakarta.persistence.Table;
@@ -18,16 +20,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NamedStoredProcedureQueries({
-	@NamedStoredProcedureQuery(
+@NamedNativeQueries({
+	@NamedNativeQuery(
 		name = "insertPayment", 
-		procedureName = "insertPayment", 
-		parameters = {
-			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
-			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_payment_date", type = String.class),
-			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_order_id", type = String.class),
-			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_id", type = String.class)
-		}
+		query = "call insertPayment(:db_id, :db_payment_date, :db_order_id, :db_user_id);", 
+		resultClass =  Payment.class 
+		
+		
 		/*
 		 * CREATE DEFINER=`root`@`localhost` PROCEDURE `insertPayment`(IN db_id TEXT, IN db_payment_date TEXT, IN db_order_id TEXT, IN db_user_id TEXT)
 			BEGIN
@@ -35,12 +34,10 @@ import lombok.NoArgsConstructor;
 			END
 		 */
 	),
-	@NamedStoredProcedureQuery(
+	@NamedNativeQuery(
 			name = "getAllPaymentByUserId", 
-			procedureName = "getAllPaymentByUserId", 
-			parameters = {
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_id", type = String.class)
-			}
+			query = "call getAllPaymentByUserId(:db_user_id);", 
+			resultClass =  Payment.class 
 			/*
 			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllPaymentByUserId`(IN db_user_id TEXT)
 				BEGIN
@@ -50,13 +47,10 @@ import lombok.NoArgsConstructor;
 		),
 })
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
 
 @Entity
 @Table(name = "payment")
+@Proxy(lazy = false)
 public class Payment {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)  
@@ -72,4 +66,44 @@ public class Payment {
 	@ManyToOne
 	@JoinColumn(name = "order_id", nullable = false, referencedColumnName = "id")
 	private Orders order;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Date getPaymentDate() {
+		return paymentDate;
+	}
+
+	public void setPaymentDate(Date paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+
+	public Orders getOrder() {
+		return order;
+	}
+
+	public void setOrder(Orders order) {
+		this.order = order;
+	}
+
+	@Override
+	public String toString() {
+		return "Payment [id=" + id + ", user=" + user + ", paymentDate=" + paymentDate + ", order=" + order + "]";
+	}
+	
+	
+	
 }

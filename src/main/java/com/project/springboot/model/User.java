@@ -3,8 +3,11 @@ package com.project.springboot.model;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.Proxy;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,6 +54,7 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 		name = "checkIfUsernameExists",
 		procedureName = "checkIfUsernameExists",
+		resultClasses = { User.class },
 		parameters = {
 			@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class),
 				
@@ -67,6 +71,7 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 			name = "validateLogin",
 			procedureName = "validateLogin",
+			resultClasses = { User.class },
 			parameters = {
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_password", type = String.class),
@@ -84,8 +89,9 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 			name = "getUserById",
 			procedureName = "getUserById",
+			resultClasses = { User.class },
 			parameters = {
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class)
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class)
 					
 			}
 				/*
@@ -100,6 +106,7 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 			name = "updateUser",
 			procedureName = "updateUser",
+			resultClasses = { User.class },
 			parameters = {
 					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
 					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_address", type = String.class),
@@ -131,28 +138,29 @@ import lombok.Setter;
 				 * 
 				 */
 		),
-	@NamedStoredProcedureQuery(
-			name = "getUserPermission",
-			procedureName = "getUserPermission",
-			parameters = {
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_id", type = String.class)
-			}
-			/*
-			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPermission`(in db_user_id text)
-				BEGIN
-					select role_permission.* from role_permission
-						inner join users 
-						on role_permission.role_id = users.role_id
-						where users.id = db_user_id;
-				END
-			 */
-	)
-	
-	
+		@NamedStoredProcedureQuery(
+				name = "getUserPermission",
+				procedureName = "getUserPermission",
+				resultClasses = { RolePermission.class },
+				parameters = {
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_id", type = String.class)
+				}
+				/*
+				 * CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserPermission`(in db_user_id text)
+					BEGIN
+						select role_permission.* from role_permission
+							inner join users 
+							on role_permission.role_id = users.role_id
+							where users.id = db_user_id;
+					END
+				 */
+		)
+		
 	
 	
 })
 @Entity
+@Proxy(lazy=false)
 @Table(name="users")
 public class User implements Serializable{
 	
@@ -185,7 +193,7 @@ public class User implements Serializable{
 	@Column(nullable = false)
 	private String address;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="role_id", nullable = false, referencedColumnName = "id")
 	private Role role;
 	
