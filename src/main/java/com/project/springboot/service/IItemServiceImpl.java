@@ -15,6 +15,10 @@ public class IItemServiceImpl implements IItemService {
 
 	@Autowired
 	ItemRepository itemRepo;
+	@Override
+	public List<Item> getAllPathItems() {
+		return itemRepo.getAllPathItems();
+	}
 	
 	@Override
 	public List<Item> checkIfItemExists(String db_name) {

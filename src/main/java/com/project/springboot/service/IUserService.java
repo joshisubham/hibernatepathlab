@@ -2,11 +2,14 @@ package com.project.springboot.service;
 
 import java.util.List;
 
+import com.project.springboot.model.RolePermission;
 import com.project.springboot.model.User;
 
 public interface IUserService {
 
 	public List<User> getAllUsers();
+	
+	public List<User> registerUserReturningUserList(User user);
 	
 	public int registerUser(User user, int roleId);
 	
@@ -16,8 +19,8 @@ public interface IUserService {
 	
 	public List<User> getUserById(String userId);
 	
-	public List<Object> getUserPermission(String userId);
+	public List<RolePermission> getUserPermission(String userId);
 	
-	public int updateUser(User user, int roleId);
+	public List<User> updateUser(User user);
 	
 }

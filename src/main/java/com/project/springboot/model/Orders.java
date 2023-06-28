@@ -25,6 +25,18 @@ import lombok.NoArgsConstructor;
 
 @NamedNativeQueries({
 	@NamedNativeQuery(
+			name="insertMultipleOrder", 
+			query = "call insertMultipleOrder(:db_id);", 
+			resultClass = Orders.class
+		/*
+		 * CREATE DEFINER=`root`@`localhost` PROCEDURE `insertOrder`(IN db_id TEXT, IN db_cancel TEXT, IN db_dateofcollection timestamp, IN db_ordertime timestamp, IN db_cart_id TEXT)
+			BEGIN
+				INSERT INTO `pathdb`.`orders`(`id`,`cancel`,`dateofcollection`,`ordertime`,`cart_id`)
+					VALUES (db_id, db_cancel, db_dateofcollection, current_timestamp(), db_cart_id);
+			END
+		 */
+	),
+	@NamedNativeQuery(
 			name="insertOrder", 
 			query = "call insertOrder(:db_id, :db_cancel, :db_dateofcollection, :db_ordertime, :db_cart_id);", 
 			resultClass = Orders.class
@@ -131,6 +143,17 @@ public class Orders {
 	
 	@Column(columnDefinition = "TINYINT(1)")
 	private boolean cancel;
+	
+	@Column(columnDefinition = "TINYINT(1)")
+	private boolean archive;
+
+	public boolean isArchive() {
+		return archive;
+	}
+
+	public void setArchive(boolean archive) {
+		this.archive = archive;
+	}
 
 	public int getId() {
 		return id;
@@ -175,7 +198,7 @@ public class Orders {
 	@Override
 	public String toString() {
 		return "Orders [id=" + id + ", cart=" + cart + ", orderTime=" + orderTime + ", dateOfCollection="
-				+ dateOfCollection + ", cancel=" + cancel + "]";
+				+ dateOfCollection + ", cancel=" + cancel + ", archive=" + archive + "]";
 	}
 	
 	

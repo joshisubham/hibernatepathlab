@@ -49,7 +49,8 @@ import lombok.Setter;
 	) ,
 	@NamedStoredProcedureQuery(
 			name = "getUsers", 
-			procedureName = "GET_USERS"
+			procedureName = "GET_USERS",
+			resultClasses = { User.class }
 	),
 	@NamedStoredProcedureQuery(
 		name = "checkIfUsernameExists",
@@ -108,19 +109,26 @@ import lombok.Setter;
 			procedureName = "updateUser",
 			resultClasses = { User.class },
 			parameters = {
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
+					
 					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_address", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_age", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_archive", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_email", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_gender", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_name", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_user_password", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_phone", type = String.class),
-					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_role_id", type = String.class)
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_age", type = Integer.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "email", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "gender", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "user_name", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "user_password", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "phone", type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "role_id", type = Integer.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "archive", type = Boolean.class),
+					@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = Integer.class),
 				}
 			
 				/*
+				 * 
+IN db_address TEXT, IN db_age INT, 
+IN email VARCHAR(250), IN gender VARCHAR(250), 
+IN user_name VARCHAR(250),IN user_password VARCHAR(250), 
+IN phone VARCHAR(250), IN role_id INT, 
+IN archive BOOLEAN, IN db_id INT
 				 * CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUser`(IN db_id TEXT, IN db_address TEXT, IN db_age TEXT, IN db_archive TEXT, IN db_email TEXT, IN db_gender TEXT, IN db_user_name TEXT, IN db_user_password TEXT, IN db_phone TEXT, IN db_role_id TEXT, OUT result INT)
 				BEGIN
 					update users set users.`address`= db_address, users.`age`= db_age,users.`archive`= db_archive,
@@ -154,6 +162,35 @@ import lombok.Setter;
 							where users.id = db_user_id;
 					END
 				 */
+		),
+		@NamedStoredProcedureQuery(
+				name = "register",
+				procedureName = "register",
+				resultClasses = {User.class},
+				parameters = {
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "address", type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "age", type = Integer.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "email", type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "gender", type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "user_name", type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "user_password", type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "phone", type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "role_id", type = Integer.class),
+						@StoredProcedureParameter(mode = ParameterMode.IN, name = "archive", type = Boolean.class),
+				}
+				/*
+				 * CREATE DEFINER=`root`@`localhost` PROCEDURE `register`(IN address VARCHAR(250), IN age INT, IN email VARCHAR(250), IN gender VARCHAR(250), IN user_name VARCHAR(250),IN user_password VARCHAR(250), IN phone VARCHAR(250), IN role_id INT, IN archive BOOLEAN)
+					BEGIN
+					
+					INSERT INTO users(`id`,`address`,`age`,`archive`,`email`,`gender`,`name`,`password`,`phone`,`role_id`)
+					VALUES(id,address,age,archive,email,gender,user_name ,user_password,phone,role_id);
+					
+					
+					select * from users where id= (select last_insert_id()) and `email`= email;
+					
+					END
+				 */
+				
 		)
 		
 	

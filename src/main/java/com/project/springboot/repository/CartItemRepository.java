@@ -25,25 +25,33 @@ public class CartItemRepository {
 	public List<Cart> checkIfCartItemExists(String db_id, String db_userId) {
 		
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("checkIfCartItemExists");
-		query.setParameter("db_id", "0"); //procedure param name, its value 
-		query.setParameter("db_userId", "thyroid");
+		query.setParameter("db_id", db_id); //procedure param name, its value 
+		query.setParameter("db_userId", db_userId);
 		return query.getResultList();
 	}
 	public List<Cart> insertCartItem(String db_id, String db_itemid, String db_userId) {
-		
-		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("insertCartItem");
-		query.setParameter("db_id", db_id); //procedure param name, its value 
-		query.setParameter("db_itemid", db_itemid);
-		query.setParameter("db_userId", db_userId);
-		return query.getResultList();
+		List<Cart> cartList = this.checkIfCartItemExists(db_itemid, db_userId);
+		if(cartList.isEmpty()) {
+			StoredProcedureQuery query = em.createNamedStoredProcedureQuery("insertCartItem");
+			query.setParameter("db_id", db_id); //procedure param name, its value 
+			query.setParameter("db_itemid", db_itemid);
+			query.setParameter("db_userId", db_userId);
+			return query.getResultList();
+		} else {
+			return null;
+		}
 	}
 	public List<Cart> deleteCartItem(String db_id, String db_itemId, String db_userId) {
-		
-		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("deleteCartItem");
-		query.setParameter("db_id", db_id); //procedure param name, its value 
-		query.setParameter("db_itemId", db_itemId);
-		query.setParameter("db_userId", db_userId);
-		return query.getResultList();
+//		List<Cart> cartList = this.checkIfCartItemExists(db_id, db_userId);
+//		if(!cartList.isEmpty()) {
+			StoredProcedureQuery query = em.createNamedStoredProcedureQuery("deleteCartItem");
+			query.setParameter("db_id", db_id); //procedure param name, its value 
+			query.setParameter("db_itemId", db_itemId);
+			query.setParameter("db_userId", db_userId);
+			return query.getResultList();
+//		} else {
+//			return null;
+//		}
 	}
 	public List<Cart> getAllCartItemsByUserId(String db_userId) {
 		

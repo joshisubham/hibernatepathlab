@@ -22,6 +22,17 @@ import lombok.NoArgsConstructor;
 
 @NamedNativeQueries({
 	@NamedNativeQuery(
+			name = "insertAllOrdersToPayment", 
+			query = "call insertAllOrdersToPayment();"			
+			
+			/*
+			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `insertPayment`(IN db_id TEXT, IN db_payment_date TEXT, IN db_order_id TEXT, IN db_user_id TEXT)
+				BEGIN
+					insert into payment(id, payment_date, order_id, user_id) values (db_id, current_timestamp(), db_order_id, db_user_id);
+				END
+			 */
+		),
+	@NamedNativeQuery(
 		name = "insertPayment", 
 		query = "call insertPayment(:db_id, :db_payment_date, :db_order_id, :db_user_id);", 
 		resultClass =  Payment.class 

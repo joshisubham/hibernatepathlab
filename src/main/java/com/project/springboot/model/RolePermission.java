@@ -45,7 +45,7 @@ public class RolePermission implements Serializable{
 //	@Column(nullable= false, name="role_id", columnDefinition = "INT")
 	private Role role;
 	
-	@OneToOne 
+	@ManyToOne 
 	@JoinColumn(nullable= false, name="module_id", referencedColumnName = "id")
 	private AppModule appmodule;
 	

@@ -3,7 +3,9 @@ package com.project.springboot.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,31 +15,40 @@ import com.project.springboot.model.Item;
 import com.project.springboot.service.ICartItemService;
 import com.project.springboot.service.IItemService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/pathLab")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CartController {
 	@Autowired
 	ICartItemService cartService;
 
-    @GetMapping(path = "/checkIfCartItemExists", produces= { "application/json" })
-	public List<Cart> checkIfCartItemExists(@RequestBody String db_id, String db_userId) {
-		return cartService.checkIfCartItemExists(db_id, db_userId);
+    @PostMapping(path = "/checkIfCartItemExists", produces= { "application/json" })
+	public List<Cart> checkIfCartItemExists(@RequestBody Cart cart) {
+    	//@RequestBody String db_id, String db_userId
+		return cartService.checkIfCartItemExists(Integer.valueOf(cart.getId()).toString(), Integer.valueOf(cart.getUser().getId()).toString());
 	}
 	
-    @GetMapping(path = "/insertCartItem", produces= { "application/json" })
-	public List<Cart> insertCartItem(@RequestBody String db_id, String db_itemid, String db_userId) {//Cart cart){//
-		// TODO Auto-generated method stub
+    @PostMapping(path = "/insertCartItem", produces= { "application/json" })
+	public List<Cart> insertCartItem(HttpServletRequest request, @RequestBody Cart cart) {//Cart cart){//
+		// TODO Auto-generated method stub // String db_id, String db_itemid, String db_userId
 //    	return cartService.insertCartItem(String.valueOf(cart.getId()), cart.getItemid(), String.valueOf(cart.getUser().getId()));
-		return cartService.insertCartItem("0", "4", "1");
+    	HttpSession session = request.getSession(false);
+		if(session == null) {
+			return null;
+		}
+		return cartService.insertCartItem(Integer.valueOf(cart.getId()).toString(), Integer.valueOf(cart.getItem().getId()).toString(), Integer.valueOf(cart.getUser().getId()).toString());          
 	}
 
-    @GetMapping(path = "/deleteCartItem", produces= { "application/json" })
-	public List<Cart> deleteCartItem(@RequestBody String db_id, String db_itemid, String db_userId) {
+    @PostMapping(path = "/deleteCartItem", produces= { "application/json" })
+	public List<Cart> deleteCartItem(@RequestBody Cart cart) {
 		// TODO Auto-generated method stub
-		return cartService.deleteCartItem("3", "4", "1");
+		return cartService.deleteCartItem(Integer.valueOf(cart.getId()).toString(), Integer.valueOf(cart.getItem().getId()).toString(), Integer.valueOf(cart.getUser().getId()).toString());
 	}
 
-    @GetMapping(path = "/getAllCartItemsByUserId", produces= { "application/json" })
+    @PostMapping(path = "/getAllCartItemsByUserId", produces= { "application/json" })
 	public List<Cart> getAllCartItemsByUserId(@RequestBody String db_userId){
 		// TODO Auto-generated method stub
 		return cartService.getAllCartItemsByUserId("1");

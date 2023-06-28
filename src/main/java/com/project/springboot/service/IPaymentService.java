@@ -12,6 +12,8 @@ import com.project.springboot.model.Payment;
 @Service
 public interface IPaymentService {
 	
+	public void insertAllOrdersToPayment();
+	
 	public List<Payment> insertPayment(String db_id, String db_payment_date, String db_order_id, String db_user_id);
 
 

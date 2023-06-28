@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.springboot.model.RolePermission;
 import com.project.springboot.model.User;
 import com.project.springboot.repository.UserRepository;
 
@@ -20,6 +21,10 @@ public class UserServiceImpl implements IUserService {
 	
 	public List<User> getAllUsers() {
 		return userRepo.getAllUsers();
+	}
+	@Transactional // (value = "transactionManager", propagation = Propagation.REQUIRED)
+	public List<User> registerUserReturningUserList(User user) {
+		return userRepo.registerUserReturningUserList(user);
 	}
 	
 	@Transactional // (value = "transactionManager", propagation = Propagation.REQUIRED)
@@ -40,12 +45,11 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Transactional
-	public int updateUser(User user, int roleId) {
-	
-		return userRepo.updateUser(user, roleId);
+	public List<User> updateUser(User user) {
+		return userRepo.updateUser(user);
 		
 	}
-	public List<Object> getUserPermission(String userId) {
+	public List<RolePermission> getUserPermission(String userId) {
 		return userRepo.getUserPermission(userId);
 	}
 	

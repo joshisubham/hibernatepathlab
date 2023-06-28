@@ -11,9 +11,18 @@ import org.springframework.data.repository.query.Param;
 import com.project.springboot.model.Item;
 import com.project.springboot.model.Orders;
 
+import jakarta.transaction.Transactional;
+
 
 
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
+	
+	@Transactional
+	@Modifying
+	@Query(name = "insertMultipleOrder", nativeQuery = true )
+//	@Query(value = "call insertOrder(:db_id, :db_cancel, :db_dateofcollection, :db_ordertime, :db_cart_id);", nativeQuery = true)
+	public void insertMultipleOrder(@Param("db_id") int db_id);
+	
 	
 	@Modifying
 	@Query(name = "insertOrder", nativeQuery = true )

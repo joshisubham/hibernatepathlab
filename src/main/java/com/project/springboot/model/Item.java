@@ -21,6 +21,18 @@ import lombok.NoArgsConstructor;
 
 @NamedStoredProcedureQueries({
 	@NamedStoredProcedureQuery(
+			name = "getAllPathItems", 
+			procedureName = "getAllPathItems", 
+			resultClasses = {Item.class}
+			
+			/*
+			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllPathItems`()
+			BEGIN
+				select * from item;
+			END
+			 */
+		),
+	@NamedStoredProcedureQuery(
 		name = "checkIfItemExists", 
 		procedureName = "checkIfItemExists", 
 		resultClasses = {Item.class},
@@ -67,15 +79,16 @@ import lombok.NoArgsConstructor;
 			procedureName = "insertItem", 
 			resultClasses = {Item.class},
 			parameters = {
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_afterfood", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_beforefood", type = String.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = Integer.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_afterfood", type = Boolean.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_beforefood", type = Boolean.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_name", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_normal", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_offer", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_price", type = String.class)
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_normal", type = Boolean.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_offer", type = Integer.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_price", type = Integer.class)
 			}
 			/*
+			 * (IN db_id TEXT, IN db_afterfood TEXT, IN db_beforefood TEXT, IN db_name TEXT, IN db_normal TEXT, IN db_offer TEXT, IN db_price TEXT)
 			 *  CREATE DEFINER=`root`@`localhost` PROCEDURE `insertItem`(IN db_id TEXT, IN db_afterfood TEXT, IN db_beforefood TEXT, IN db_name TEXT, IN db_normal TEXT, IN db_offer TEXT, IN db_price TEXT)
 				BEGIN
 					INSERT INTO `pathdb`.`item`(`id`,`afterfood`,`archive`,`beforefood`,`name`,`normal`,`offer`,`price`)
@@ -90,15 +103,15 @@ import lombok.NoArgsConstructor;
 			procedureName = "updateItem", 
 			resultClasses = {Item.class},
 			parameters = {
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_afterfood", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_beforefood", type = String.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_id", type = Integer.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_afterfood", type = Boolean.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_beforefood", type = Boolean.class),
 				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_name", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_normal", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_offer", type = String.class),
-				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_price", type = String.class)
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_normal", type = Boolean.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_offer", type = Integer.class),
+				@StoredProcedureParameter(mode = ParameterMode.IN, name = "db_price", type = Integer.class)
 			}
-			/*
+			/* (IN db_id INT, IN db_afterfood BOOLEAN, IN db_beforefood BOOLEAN, IN db_name TEXT, IN db_normal BOOLEAN, IN db_offer INT, IN db_price INT)
 			 *  CREATE DEFINER=`root`@`localhost` PROCEDURE `updateItem`(IN db_id TEXT, IN db_afterfood TEXT, IN db_beforefood TEXT, IN db_name TEXT, IN db_normal TEXT, IN db_offer TEXT, IN db_price TEXT)
 				BEGIN
 						UPDATE item SET `afterfood`= db_afterfood,`archive`= 0,`beforefood`= db_beforefood,

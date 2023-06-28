@@ -34,4 +34,10 @@ public class IOrderServiceImpl implements IOrderService {
 		return orderRepo.getAllOrdersByUserId(db_user_id);
 	}
 
+	@Override
+	public void insertMultipleOrder(int userId) {
+		// TODO Auto-generated method stub
+		orderRepo.insertMultipleOrder(userId);
+	}
+
 }

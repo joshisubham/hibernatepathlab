@@ -18,6 +18,10 @@ import jakarta.persistence.StoredProcedureParameter;
 
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 	
+	@Modifying
+	@Query(name = "insertAllOrdersToPayment", nativeQuery = true)
+	public void insertAllOrdersToPayment();
+	
 //	@Modifying
 	@Query(name = "insertPayment", nativeQuery = true)
 	public List<Payment> insertPayment(@Param("db_id") String db_id, @Param("db_payment_date") java.sql.Date db_payment_date, 

@@ -24,6 +24,10 @@ public class ItemRepository {
 	@PersistenceContext(type = PersistenceContextType.EXTENDED)
 	private EntityManager em;
 	
+	public List<Item> getAllPathItems() {
+		return em.createNamedStoredProcedureQuery("getAllPathItems").getResultList();	
+	}
+	
 	public List<Item> checkIfItemExists(String db_name) {
 		
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("checkIfItemExists");
@@ -47,24 +51,24 @@ public class ItemRepository {
 		
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("insertItem");
 		query.setParameter("db_id", "0"); //procedure param name, its value 
-		query.setParameter("db_afterfood", "1");
-		query.setParameter("db_beforefood", "1");
-		query.setParameter("db_name", "123as");
-		query.setParameter("db_normal", "1");
-		query.setParameter("db_offer", "1");
-		query.setParameter("db_price", "1");
+		query.setParameter("db_afterfood", item.isAfterfood());
+		query.setParameter("db_beforefood", item.isBeforefood());
+		query.setParameter("db_name", item.getName());
+		query.setParameter("db_normal", item.isNormal());
+		query.setParameter("db_offer", item.getOffer());
+		query.setParameter("db_price", item.getPrice());
 		return query.getResultList();
 	}
 	public List<Item> updateItem(Item item) {
 		
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("updateItem");
-		query.setParameter("db_id", "5"); //procedure param name, its value 
-		query.setParameter("db_afterfood", "1");
-		query.setParameter("db_beforefood", "1");
-		query.setParameter("db_name", "Testing");
-		query.setParameter("db_normal", "0");
-		query.setParameter("db_offer", "1");
-		query.setParameter("db_price", "1");
+		query.setParameter("db_id", item.getId()); //procedure param name, its value 
+		query.setParameter("db_afterfood", item.isAfterfood());
+		query.setParameter("db_beforefood", item.isBeforefood());
+		query.setParameter("db_name", item.getName());
+		query.setParameter("db_normal", item.isNormal());
+		query.setParameter("db_offer", item.getOffer());
+		query.setParameter("db_price", item.getPrice());
 		return query.getResultList();
 	}
 	

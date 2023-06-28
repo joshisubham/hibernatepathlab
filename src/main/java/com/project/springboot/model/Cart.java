@@ -1,7 +1,10 @@
 package com.project.springboot.model;
 
+
+
 import org.hibernate.annotations.Proxy;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -95,11 +98,25 @@ public class Cart {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)  
 	private int id;
+	
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable = false, referencedColumnName = "id")
 	private User user;
 	
-	private String itemid;
+	@ManyToOne
+	@JoinColumn(name="itemid", nullable = false, referencedColumnName = "id")
+	private Item item;
+
+	@Column(columnDefinition = "TINYINT(1)", nullable = false)
+	private boolean archive;
+	
+	public boolean isArchive() {
+		return archive;
+	}
+
+	public void setArchive(boolean archive) {
+		this.archive = archive;
+	}
 
 	public int getId() {
 		return id;
@@ -117,18 +134,20 @@ public class Cart {
 		this.user = user;
 	}
 
-	public String getItemid() {
-		return itemid;
+	public Item getItem() {
+		return item;
 	}
 
-	public void setItemid(String itemid) {
-		this.itemid = itemid;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	@Override
 	public String toString() {
-		return "Cart [id=" + id + ", user=" + user + ", itemid=" + itemid + "]";
+		return "Cart [id=" + id + ", user=" + user + ", item=" + item + ", archive=" + archive + "]";
 	}
+
+	
 	
 	
 	
