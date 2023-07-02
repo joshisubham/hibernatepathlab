@@ -21,8 +21,8 @@ public class IPaymentServiceImpl implements IPaymentService {
 
 	@Override
 	@Transactional
-//	@Scheduled(cron = "0 0 23 * *")
-	@Scheduled(cron = "*/20 * * * * *") //every two sec
+//	@Scheduled(cron = "0 0 23 * * ?")
+	@Scheduled(cron = "0 0 */2 * * ?")
 	public void insertAllOrdersToPayment() {
 //		long millis = System.currentTimeMillis();  
 //		Date d = (Date) new java.util.Date(millis);      

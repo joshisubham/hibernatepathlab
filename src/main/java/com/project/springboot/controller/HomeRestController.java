@@ -1,5 +1,7 @@
 package com.project.springboot.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/pathLab")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class HomeRestController {
 
 	@Autowired
@@ -99,41 +101,19 @@ public class HomeRestController {
 		users.forEach((x)->{System.out.println(x);});
 		return users;
 	}
-	@PostMapping(path = "/validateLogin", produces = { "application/json" }, consumes = { "application/json" })
-	public List<User> validateLogin( HttpServletRequest request, @RequestBody User user) {
+//	@PostMapping(path = "/validateLogin")
+	@PostMapping(path = "/test1")
+	public List<User> test1( @RequestBody User user, HttpServletRequest request) {
 		List<User> users = null;
-//		users = userService.validateLogin(user.getEmail(), user.getPassword());
-//		users.forEach((x)->{System.out.println(x);});
-//		if(!users.isEmpty()) {
-			HttpSession session = request.getSession(false);
-			if(session == null) {
-				session = request.getSession(true);
-				users = userService.validateLogin(user.getEmail(), user.getPassword());
-				if(!users.isEmpty()) {
-					session.setAttribute("loggedUser", users.get(0));
-					session.setAttribute("loggedInUserId", users.get(0).getId());
-					session.setAttribute("sessionId", session.getId());
-				}
-			} else {
-
-				User loggedUser = (User)session.getAttribute("loggedUser");
-				users.add(loggedUser);
-//				users = 
-			}
-//			List<RolePermission> userPermissions = userService.getUserPermission(Integer.valueOf(users.get(0).getId()).toString());
-//			LinkedHashMap<String, Boolean> permissionMap = new LinkedHashMap<String, Boolean>();
-//			for(int i = 0; i < userPermissions.size(); i++) {
-//				RolePermission rp = userPermissions.get(i);
-//				String moduleName = rp.getAppmodule().getName();
-//				Boolean viewPermission = rp.isViewpermission();
-//				permissionMap.put(moduleName, viewPermission);
-//			}
-//			permissionMap.forEach((x, y)->{System.out.println(x+">>"+y);});
-//			session.setAttribute("userPermissions", userPermissions);
-//		}
-		
-		
-		
+		String msg = "1";
+		List<String> messages = (List<String>) request.getSession().getAttribute("MY_SESSION_MESSAGES");
+		if (messages == null) {
+			messages = new ArrayList<>();
+			request.getSession().setAttribute("MY_SESSION_MESSAGES", messages);
+		}
+		users = userService.validateLogin(user.getEmail(), user.getPassword());
+		messages.add(msg);
+		request.getSession().setAttribute("MY_SESSION_MESSAGES", messages);
 		return users;
 		
 	}
@@ -144,16 +124,9 @@ public class HomeRestController {
 		return users;
 		
 	}
-	@PostMapping(path = "/getUserPermission", produces = { "application/json" }, consumes = {"application/json"})	
-	public List<RolePermission> getUserPermission(HttpServletRequest request, @RequestBody User user) {
-//		Integer userId = 0;
-//		HttpSession session = request.getSession(false);
-//		if(session != null) {
-//			userId = (Integer)session.getAttribute("loggedInUserId");
-//			System.out.println("userId>>"+userId);
-//		}
-//		return userService.getUserPermission(Integer.valueOf(userId).toString());
-		return userService.getUserPermission(Integer.valueOf(user.getId()).toString());
+	@PostMapping(path = "/getUserPermission", produces = { "application/json" })	
+	public List<RolePermission> getUserPermission(HttpServletRequest request){//@RequestBody User user, HttpServletRequest request) {
+		return userService.getUserPermission(Integer.valueOf(1).toString());
 	}
 	@PostMapping(path = "/updateUser", produces = { "application/json" })	
 	public List<User> updateUser(@RequestBody User user) {
@@ -174,17 +147,129 @@ public class HomeRestController {
 		return arr.toString();//testCartItem.toString();
 		
 	}
-	@GetMapping(path = "/logout", produces = { "application/json" })	
-	public void logout(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if(session != null) {
-			session.removeAttribute("loggedUser");
-			session.removeAttribute("loggedInUserId");
-			session.removeAttribute("sessionId");
-			session.invalidate();			
+	
+	@PostMapping(path = "/validateLogin")
+	public List<User> validateLogin(@RequestBody User user, HttpSession session) {
+		List<User> users = null;
+		Object loggedInUserId = (Integer) session.getAttribute("LOGGEDINUSERID");
+		List<User> loggedInUserList = (List<User>) session.getAttribute("LOGGEDINUSERLIST");
+		if (loggedInUserId == null) {
+			users = userService.validateLogin(user.getEmail(), user.getPassword());
+			loggedInUserId = users.get(0).getId();
+			session.setAttribute("LOGGEDINUSERID", loggedInUserId);
+			session.setAttribute("LOGGEDINUSERLIST", users);
+			System.out.println("Here>>1"+ session.getAttribute("LOGGEDINUSERID"));
+			
+			
+		} else {
+			System.out.println("Here>>2"+ session.getAttribute("LOGGEDINUSERID"));
+			return loggedInUserList;
+		}		
+		return users;
+	}
+		
+		/*Integer loggedInUserId = (Integer) request.getSession().getAttribute("LOGGEDINUSERID");
+		List<User> loggedInUserList = (List<User>) request.getSession().getAttribute("LOGGEDINUSERLIST");
+		if (loggedInUserId == null) {
+			loggedInUserId = 0;
+			loggedInUserList = new ArrayList<>();
+			request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+			request.getSession().setAttribute("LOGGEDINUSERLIST", loggedInUserList);
 		} 
 		
+		List<User> users = userService.validateLogin(user.getEmail(), user.getPassword());
+		loggedInUserId = users.get(0).getId();
+		request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		request.getSession().setAttribute("LOGGEDINUSERLIST", users);
+		return users;*/
+		
+		/*Integer loggedInUserId = (Integer) request.getSession().getAttribute("LOGGEDINUSERID");
+		if (loggedInUserId == null) {
+			loggedInUserId = 0;
+			request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		}
+		
+		List<User> users = userService.validateLogin(user.getEmail(), user.getPassword());
+		loggedInUserId = users.get(0).getId();
+		request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		return users;*/
+		/*List<Integer> loggedInUserId = (List<Integer>) request.getSession().getAttribute("LOGGEDINUSERID");
+		if (loggedInUserId == null) {
+			loggedInUserId = new ArrayList<>();
+			request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		}
+		
+		List<User> users = userService.validateLogin(user.getEmail(), user.getPassword());
+		loggedInUserId.add(users.get(0).getId());
+		request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		return users;*/
+		
+		
+		/*List<String> loggedInUserId = (List<String>) request.getSession().getAttribute("LOGGEDINUSERID");
+		if (loggedInUserId == null) {
+			loggedInUserId = new ArrayList<>();
+			request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		}
+		
+		List<User> users = userService.validateLogin(user.getEmail(), user.getPassword());
+		String msg1 = Integer.valueOf(users.get(0).getId()).toString();
+		System.out.println("loginid:"+ msg1);
+		loggedInUserId.add(msg1);
+		request.getSession().setAttribute("LOGGEDINUSERID", loggedInUserId);
+		return users;*/
+		
+//	}
+	
+	@PostMapping(path = "/logout")	
+	public void logout(HttpSession session) {
+		Integer loggedInUserId = (Integer) session.getAttribute("LOGGEDINUSERID");
+		
+		System.out.println("Here Logout>>"+ session.getAttribute("LOGGEDINUSERID"));
+		session.invalidate();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//		loggedInUserList.forEach(x->{System.out.println(">>"+ x.getEmail());});
+		
+	/*  List<Integer> loggedInUserId = (List<Integer>) request.getSession().getAttribute("LOGGEDINUSERID");
+		loggedInUserId.forEach(x->{System.out.println(">>"+ x);});
+		request.getSession().invalidate();*/
+	/*	List<String> loggedInUserId = (List<String>) request.getSession().getAttribute("LOGGEDINUSERID");
+		loggedInUserId.forEach(x->{System.out.println(">>"+ x);});
+		request.getSession().invalidate();*/
+
+		
+//	}
+	
+	@GetMapping("/viewSessionData")                     // it will handle all request for /welcome
+    public java.util.Map<String,Integer> start(HttpServletRequest request) {
+        Integer integer =(Integer) request.getSession().getAttribute("hitCounter"); /// it will read data from database tables
+        if(integer==null){
+            integer=new Integer(0);
+            integer++;
+            request.getSession().setAttribute("hitCounter",integer);  // it will write data to tables
+        }else{
+            integer++;
+            request.getSession().setAttribute("hitCounter",integer);  // it will write data to tables
+        }
+        java.util.Map<String,Integer> hitCounter=new HashMap<>();
+        hitCounter.put("Hit Counter",integer);
+        return hitCounter;
+    }
 	
   
     

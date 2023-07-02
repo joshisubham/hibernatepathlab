@@ -16,9 +16,11 @@ import com.project.springboot.service.IModuleService;
 import com.project.springboot.service.IRoleService;
 import com.project.springboot.service.IUserService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/pathLab")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class ItemController {
 	
 	
@@ -30,7 +32,7 @@ public class ItemController {
 		return itemService.getAllPathItems();
 	}
     @GetMapping(path = "/checkIfItemExists", produces= { "application/json" })
-	public List<Item> checkIfItemExists(@RequestBody String db_name) {
+	public List<Item> checkIfItemExists(@RequestBody String db_name, HttpServletRequest request) {
 		return itemService.checkIfItemExists(db_name);
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.springboot.model.Cart;
 import com.project.springboot.model.Item;
+import com.project.springboot.model.User;
 import com.project.springboot.service.ICartItemService;
 import com.project.springboot.service.IItemService;
 
@@ -20,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/pathLab")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class CartController {
 	@Autowired
 	ICartItemService cartService;
@@ -32,13 +33,9 @@ public class CartController {
 	}
 	
     @PostMapping(path = "/insertCartItem", produces= { "application/json" })
-	public List<Cart> insertCartItem(HttpServletRequest request, @RequestBody Cart cart) {//Cart cart){//
+	public List<Cart> insertCartItem(@RequestBody Cart cart) {//Cart cart){//
 		// TODO Auto-generated method stub // String db_id, String db_itemid, String db_userId
-//    	return cartService.insertCartItem(String.valueOf(cart.getId()), cart.getItemid(), String.valueOf(cart.getUser().getId()));
-    	HttpSession session = request.getSession(false);
-		if(session == null) {
-			return null;
-		}
+
 		return cartService.insertCartItem(Integer.valueOf(cart.getId()).toString(), Integer.valueOf(cart.getItem().getId()).toString(), Integer.valueOf(cart.getUser().getId()).toString());          
 	}
 
@@ -49,8 +46,9 @@ public class CartController {
 	}
 
     @PostMapping(path = "/getAllCartItemsByUserId", produces= { "application/json" })
-	public List<Cart> getAllCartItemsByUserId(@RequestBody String db_userId){
+	public List<Cart> getAllCartItemsByUserId(@RequestBody User user){
+    	
 		// TODO Auto-generated method stub
-		return cartService.getAllCartItemsByUserId("1");
+		return cartService.getAllCartItemsByUserId(Integer.valueOf(user.getId()).toString());
 	}
 }

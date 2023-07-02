@@ -124,11 +124,11 @@ import lombok.Setter;
 			
 				/*
 				 * 
-IN db_address TEXT, IN db_age INT, 
-IN email VARCHAR(250), IN gender VARCHAR(250), 
-IN user_name VARCHAR(250),IN user_password VARCHAR(250), 
-IN phone VARCHAR(250), IN role_id INT, 
-IN archive BOOLEAN, IN db_id INT
+				IN db_address TEXT, IN db_age INT, 
+				IN email VARCHAR(250), IN gender VARCHAR(250), 
+				IN user_name VARCHAR(250),IN user_password VARCHAR(250), 
+				IN phone VARCHAR(250), IN role_id INT, 
+				IN archive BOOLEAN, IN db_id INT
 				 * CREATE DEFINER=`root`@`localhost` PROCEDURE `updateUser`(IN db_id TEXT, IN db_address TEXT, IN db_age TEXT, IN db_archive TEXT, IN db_email TEXT, IN db_gender TEXT, IN db_user_name TEXT, IN db_user_password TEXT, IN db_phone TEXT, IN db_role_id TEXT, OUT result INT)
 				BEGIN
 					update users set users.`address`= db_address, users.`age`= db_age,users.`archive`= db_archive,

@@ -25,6 +25,7 @@ public class ItemRepository {
 	private EntityManager em;
 	
 	public List<Item> getAllPathItems() {
+		em.clear();
 		return em.createNamedStoredProcedureQuery("getAllPathItems").getResultList();	
 	}
 	

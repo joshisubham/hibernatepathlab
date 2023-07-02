@@ -72,6 +72,18 @@ import lombok.NoArgsConstructor;
 				END
 			 */
 		),
+	@NamedNativeQuery(
+			name = "cancelOrder", 
+			query = "call cancelOrder(:db_id);" 
+			/*
+			 * CREATE DEFINER=`root`@`localhost` PROCEDURE `cancelOrder`(IN db_id INT)
+				BEGIN
+					UPDATE orders SET cancel = 1 WHERE id = db_id and archive =0;
+				
+				END
+			 */
+			
+	)
 })
 
 //@NamedStoredProcedureQueries({

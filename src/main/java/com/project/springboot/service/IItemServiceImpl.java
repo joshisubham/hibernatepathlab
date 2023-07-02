@@ -3,6 +3,7 @@ package com.project.springboot.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.model.Item;
@@ -15,7 +16,9 @@ public class IItemServiceImpl implements IItemService {
 
 	@Autowired
 	ItemRepository itemRepo;
+	
 	@Override
+	@Transactional 
 	public List<Item> getAllPathItems() {
 		return itemRepo.getAllPathItems();
 	}
@@ -45,6 +48,8 @@ public class IItemServiceImpl implements IItemService {
 	}
 
 	@Override
+	@Modifying //(clearAutomatically = true)
+	@Transactional
 	public List<Item> updateItem(Item item) {
 		// TODO Auto-generated method stub
 		return itemRepo.updateItem(item);

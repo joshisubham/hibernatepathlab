@@ -40,6 +40,11 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 //	@Query(value = "call getAllOrdersByUserId(:db_user_id);", nativeQuery = true)
 	public List<Orders> getAllOrdersByUserId(@Param("db_user_id") String db_user_id);
 	
+	@Transactional
+	@Modifying
+	@Query(name = "cancelOrder", nativeQuery = true)
+	public void cancelOrder(@Param("db_id") String db_id);
+	
 	
 }
 	

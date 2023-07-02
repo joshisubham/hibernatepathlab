@@ -20,4 +20,6 @@ public interface IOrderService {
 
 	public List<Orders> getAllOrdersByUserId(String db_user_id);
 	
+	public void cancelOrder(String db_id);
+	
 }

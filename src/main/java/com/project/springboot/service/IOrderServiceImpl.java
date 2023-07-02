@@ -3,6 +3,7 @@ package com.project.springboot.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.project.springboot.model.Orders;
@@ -38,6 +39,11 @@ public class IOrderServiceImpl implements IOrderService {
 	public void insertMultipleOrder(int userId) {
 		// TODO Auto-generated method stub
 		orderRepo.insertMultipleOrder(userId);
+	}
+	
+	@Override
+	public void cancelOrder(String db_id) {
+		orderRepo.cancelOrder(db_id);
 	}
 
 }

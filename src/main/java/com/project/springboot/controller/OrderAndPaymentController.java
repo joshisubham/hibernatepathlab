@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/pathLab")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class OrderAndPaymentController {
 	
 	@Autowired
@@ -48,7 +48,7 @@ public class OrderAndPaymentController {
    	public List<Orders> deleteOrder(@RequestBody String db_id){
    		return orderService.deleteOrder(db_id);
    	} 
-    @PostMapping(path = "/getAllOrdersByUserId", produces= { "application/json" })
+    @PostMapping(path = "/getAllOrdersByUserId")
    	public List<Orders> getAllOrdersByUserId(@RequestBody String db_id){
    		return orderService.getAllOrdersByUserId("1");
    	} 
@@ -59,16 +59,20 @@ public class OrderAndPaymentController {
     	paymentService.insertAllOrdersToPayment();
 //   		return paymentService.insertPayment("0", "1321182500000", "1", "1");
    	} 
-    @PostMapping(path = "/getAllPaymentByUserId", produces= { "application/json" })
-   	public List<Payment> getAllPaymentByUserId(HttpServletRequest request, @RequestBody String db_id){
-//    	HttpSession session = request.getSession(false);
-//    	int userId;
-//		if(session == null) {
+    @PostMapping(path = "/getAllPaymentByUserId")
+   	public List<Payment> getAllPaymentByUserId(HttpServletRequest request){ //@RequestBody String db_id,
+//    	Integer userId = (Integer)request.getSession().getAttribute("LOGGEDINUSERID");
+//    	
+//		if(userId == null) {
 //			return null;
-//		} else {
-//			userId = (Integer)session.getAttribute("loggedInUserId");
-//		}
+//		} 
 		
    		return paymentService.getAllPaymentByUserId(Integer.valueOf(1).toString()); //"1");
+   	} 
+    
+    @PostMapping(path = "/cancelOrder", produces= { "application/json" })
+   	public void cancelOrder(@RequestBody Orders orders) {
+    	orderService.cancelOrder(Integer.valueOf(orders.getId()).toString());
+//   		return paymentService.insertPayment("0", "1321182500000", "1", "1");
    	} 
 }
